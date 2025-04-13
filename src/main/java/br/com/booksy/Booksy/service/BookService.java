@@ -15,11 +15,11 @@ import java.util.UUID;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private BookMapper bookMapper;
+    private final BookMapper bookMapper;
 
     public BookDTO findById(UUID id) {
         return bookRepository.findById(id)
-                .map(book -> bookMapper.bookToBookDTO(book))
+                .map(bookMapper::bookToBookDTO)
                 .orElseThrow(
                 () -> new CommonException(HttpStatus.NOT_FOUND,  "booksy.book.findById.notFound", "Book not found")
         );

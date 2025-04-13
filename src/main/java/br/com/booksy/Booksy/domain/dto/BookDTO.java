@@ -1,14 +1,15 @@
 package br.com.booksy.Booksy.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Data
 public class BookDTO {
-
+    private UUID id;
+    private String title;
+    private String isbn;
+    private Integer pagesNumber;
+    private LocalDateTime releaseDate;
 }
