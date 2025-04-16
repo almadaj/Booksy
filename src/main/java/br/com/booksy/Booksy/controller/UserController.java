@@ -3,6 +3,7 @@ package br.com.booksy.Booksy.controller;
 import br.com.booksy.Booksy.domain.dto.UserRequestDTO;
 import br.com.booksy.Booksy.domain.dto.UserResponseDTO;
 import br.com.booksy.Booksy.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,12 +21,12 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponseDTO save(@RequestBody UserRequestDTO user) {
+    public UserResponseDTO save(@RequestBody @Valid UserRequestDTO user) {
         return userService.save(user);
     }
 
     @PutMapping
-    public UserResponseDTO update(@RequestBody UserRequestDTO user) {
+    public UserResponseDTO update(@RequestBody @Valid UserRequestDTO user) {
         return userService.update(user);
     }
 

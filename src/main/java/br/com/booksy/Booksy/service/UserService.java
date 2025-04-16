@@ -28,6 +28,7 @@ public class UserService {
 
     public UserResponseDTO save(UserRequestDTO userDTO) {
         try {
+            userDTO.setId(null);
             userDTO.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
             var newUser = userRepository.save(userMapper.userRequestDTOtoUser(userDTO));
             return userMapper.userToUserResponseDTO(newUser);
