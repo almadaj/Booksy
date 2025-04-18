@@ -42,6 +42,6 @@ public class CategoryService {
 
     @Transactional
     public void delete(UUID id) {
-        categoryRepository.deleteById(id);
+        categoryRepository.delete(findById(id));
     }
 }
