@@ -5,6 +5,7 @@ import br.com.booksy.Booksy.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +17,7 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping("/{id}")
-    public BookDTO findBookById(UUID id) {
+    public BookDTO findBookById(@PathVariable UUID id) {
         return bookService.findById(id);
     }
 
@@ -26,9 +27,16 @@ public class BookController {
         return bookService.findAll(page, size);
     }
 
+    @GetMapping("/upload/{id}")
+    public String getUploadLink(@PathVariable String id) {
+        return bookService.bookUploadLink(id);
+    }
+
     @PostMapping
-    public BookDTO save(@RequestBody @Valid BookDTO bookDTO) {
-        return bookService.save(bookDTO);
+    public BookDTO save(
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("book") @Valid BookDTO bookDTO) {
+        return bookService.save(bookDTO, file);
     }
 
     @PutMapping
