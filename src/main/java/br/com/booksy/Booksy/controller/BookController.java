@@ -16,7 +16,7 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping("/{id}")
-    public BookDTO findBookById(UUID id) {
+    public BookDTO findBookById(@PathVariable UUID id) {
         return bookService.findById(id);
     }
 
