@@ -1,10 +1,15 @@
 package br.com.booksy.Booksy.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
 import java.util.Date;
 import java.util.UUID;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "rating")
 public class Review {
@@ -19,8 +24,10 @@ public class Review {
 //    @Column(name = "bookId", nullable = false)
 //    private UUID bookId;
 
-    @Column(nullable = false)
-    private double rating;
+    @Column()
+    @Min(1)
+    @Max(5)
+    private int rating;
 
     @Column(length = 100)
     private String title;
