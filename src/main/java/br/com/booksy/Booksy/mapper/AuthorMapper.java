@@ -10,5 +10,6 @@ public abstract class AuthorMapper {
     public static final AuthorMapper INSTANCE = Mappers.getMapper(AuthorMapper.class);
 
     public abstract AuthorDTO toAuthorDTO(Author author);
+
     public abstract Author toAuthor(AuthorDTO authorDTO);
 }
