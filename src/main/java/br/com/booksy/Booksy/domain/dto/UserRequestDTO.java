@@ -11,12 +11,12 @@ import java.util.UUID;
 public class UserRequestDTO {
     private UUID id;
     @NotNull
-    @NotBlank(message = "Nome não pode ser vazio")
+    @NotBlank
     private String name;
     @Email(message = "Email inválido")
     private String email;
     @NotNull
-    @NotBlank(message = "Senha não pode ser vazio")
+    @NotBlank
     private String password;
     @NotNull
     private Boolean isAdmin;

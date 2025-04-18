@@ -16,14 +16,14 @@ public class Book {
     @Column(nullable = false, length = 150)
     private String title;
 
-    @Column(nullable = false)
+    @Column(unique = true)
     private String isbn;
 
     @Column(nullable = false)
     private Integer pagesNumber;
 
     @Column(nullable = false)
-    private LocalDateTime releaseDate;
+    private Integer releaseDate;
 
     /*@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "author_id", referencedColumnName = "id")

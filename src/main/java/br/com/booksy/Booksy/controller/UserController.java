@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,6 +19,12 @@ public class UserController {
     @GetMapping("/{id}")
     public UserResponseDTO findUserById(@PathVariable UUID id) {
         return userService.findById(id);
+    }
+
+    @GetMapping
+    public List<UserResponseDTO> findAll(@RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size) {
+        return userService.findAll(page, size);
     }
 
     @PostMapping

@@ -2,9 +2,11 @@ package br.com.booksy.Booksy.controller;
 
 import br.com.booksy.Booksy.domain.dto.BookDTO;
 import br.com.booksy.Booksy.service.BookService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,13 +20,19 @@ public class BookController {
         return bookService.findById(id);
     }
 
+    @GetMapping
+    public List<BookDTO> findAll(@RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size) {
+        return bookService.findAll(page, size);
+    }
+
     @PostMapping
-    public BookDTO save(@RequestBody BookDTO bookDTO) {
+    public BookDTO save(@RequestBody @Valid BookDTO bookDTO) {
         return bookService.save(bookDTO);
     }
 
     @PutMapping
-    public BookDTO update(@RequestBody BookDTO bookDTO) {
+    public BookDTO update(@RequestBody @Valid BookDTO bookDTO) {
         return bookService.update(bookDTO);
     }
 

@@ -6,11 +6,16 @@ import br.com.booksy.Booksy.domain.mapper.UserMapper;
 import br.com.booksy.Booksy.exception.CommonException;
 import br.com.booksy.Booksy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +29,11 @@ public class UserService {
                 .orElseThrow(
                 () -> new CommonException(HttpStatus.NOT_FOUND,  "booksy.user.findById.notFound", "User not found")
         );
+    }
+
+    public List<UserResponseDTO> findAll(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
+        return this.userRepository.findAll(pageable).stream().map(userMapper::userToUserResponseDTO).collect(Collectors.toList());
     }
 
     public UserResponseDTO save(UserRequestDTO userDTO) {
