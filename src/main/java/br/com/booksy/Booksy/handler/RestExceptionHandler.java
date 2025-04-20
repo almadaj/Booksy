@@ -12,22 +12,23 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-        String fields = fieldErrors.stream().map(FieldError::getField).collect(Collectors.joining(", "));
-        String fieldsMessage = fieldErrors.stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(", "));
+        Map<String, String> fieldErrorsMap = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage, (msg1, msg2) -> msg1));
 
         return new ResponseEntity<>(
                 ValidationExceptionDetails.builder()
                         .status(HttpStatus.BAD_REQUEST.value())
                         .title("Invalid fields")
-                        .fields(fields)
-                        .fieldsMessage(fieldsMessage)
+                        .fieldErrors(fieldErrorsMap)
                         .build(), HttpStatus.BAD_REQUEST
         );
     }
