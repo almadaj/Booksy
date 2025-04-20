@@ -2,6 +2,7 @@ package br.com.booksy.Booksy.service;
 
 import br.com.booksy.Booksy.domain.dto.CategoryDTO;
 import br.com.booksy.Booksy.domain.model.Category;
+import br.com.booksy.Booksy.exception.CommonException;
 import br.com.booksy.Booksy.mapper.CategoryMapper;
 import br.com.booksy.Booksy.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class CategoryService {
 
     public Category findById(UUID id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found"));
+                .orElseThrow(() -> new CommonException("Category not found"));
     }
 
     @Transactional

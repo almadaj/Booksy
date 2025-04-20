@@ -2,6 +2,7 @@ package br.com.booksy.Booksy.service;
 
 import br.com.booksy.Booksy.domain.dto.AuthorDTO;
 import br.com.booksy.Booksy.domain.model.Author;
+import br.com.booksy.Booksy.exception.CommonException;
 import br.com.booksy.Booksy.mapper.AuthorMapper;
 import br.com.booksy.Booksy.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class AuthorService {
 
     public Author findById(UUID id) {
         return authorRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Author not found"));
+                .orElseThrow(() -> new CommonException("Author not found"));
     }
 
     @Transactional

@@ -3,6 +3,7 @@ package br.com.booksy.Booksy.controller;
 import br.com.booksy.Booksy.domain.dto.CategoryDTO;
 import br.com.booksy.Booksy.domain.model.Category;
 import br.com.booksy.Booksy.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +29,12 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> save(@RequestBody CategoryDTO category) {
+    public ResponseEntity<Category> save(@RequestBody @Valid CategoryDTO category) {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(category));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> update(@PathVariable UUID id, @RequestBody CategoryDTO category) {
+    public ResponseEntity<Category> update(@PathVariable UUID id, @RequestBody @Valid CategoryDTO category) {
         return ResponseEntity.ok(categoryService.update(id, category));
     }
 

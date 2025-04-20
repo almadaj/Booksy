@@ -3,6 +3,7 @@ package br.com.booksy.Booksy.controller;
 import br.com.booksy.Booksy.domain.dto.AuthorDTO;
 import br.com.booksy.Booksy.domain.model.Author;
 import br.com.booksy.Booksy.service.AuthorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +29,12 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<Author> save(@RequestBody AuthorDTO author) {
+    public ResponseEntity<Author> save(@RequestBody @Valid AuthorDTO author) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authorService.save(author));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Author> update(@PathVariable UUID id, @RequestBody AuthorDTO author) {
+    public ResponseEntity<Author> update(@PathVariable UUID id, @RequestBody @Valid AuthorDTO author) {
         return ResponseEntity.ok(authorService.update(id, author));
     }
 
