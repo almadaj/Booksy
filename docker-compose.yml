@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres
+    container_name: booksy_postgresql
+    environment:
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5432:5432"
+    volumes:
+      - booksy_data:/var/lib/postgresql/data
+
+volumes:
+  booksy_data:
