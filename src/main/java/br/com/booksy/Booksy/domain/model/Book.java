@@ -32,6 +32,9 @@ public class Book {
     @Column(length = 100)
     private String uploadId;
 
+    @Column(length = 100)
+    private String viewLink;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

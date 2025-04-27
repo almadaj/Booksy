@@ -24,7 +24,9 @@ public class BookDTO {
     )
     private String isbn;
     private String uploadId;
+    private String viewLink;
     @NotNull
     private Integer pagesNumber;
+    @NotNull
     private Integer releaseDate;
 }

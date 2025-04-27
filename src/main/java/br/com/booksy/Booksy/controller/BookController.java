@@ -27,11 +27,6 @@ public class BookController {
         return bookService.findAll(page, size);
     }
 
-    @GetMapping("/upload/{id}")
-    public String getUploadLink(@PathVariable String id) {
-        return bookService.bookUploadLink(id);
-    }
-
     @PostMapping
     public BookDTO save(
             @RequestPart("file") MultipartFile file,
