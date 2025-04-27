@@ -1,10 +1,11 @@
 package br.com.booksy.Booksy.service;
 
 import br.com.booksy.Booksy.domain.dto.BookDTO;
+import br.com.booksy.Booksy.domain.dto.BookRequestDTO;
+import br.com.booksy.Booksy.domain.dto.BookUpload;
 import br.com.booksy.Booksy.domain.mapper.BookMapper;
 import br.com.booksy.Booksy.exception.CommonException;
 import br.com.booksy.Booksy.repository.BookRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +29,7 @@ public class BookService {
 
     public BookDTO findById(UUID id) {
         return bookRepository.findById(id)
-                .map(bookMapper::bookToBookDTO)
+                .map(bookMapper::toDTO)
                 .orElseThrow(
                 () -> new CommonException(HttpStatus.NOT_FOUND,  "booksy.book.findById.notFound", "Book not found")
         );
@@ -36,24 +37,31 @@ public class BookService {
 
     public List<BookDTO> findAll(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
-        return this.bookRepository.findAll(pageable).stream().map(bookMapper::bookToBookDTO).collect(Collectors.toList());
+        return this.bookRepository.findAll(pageable).stream().map(bookMapper::toDTO).collect(Collectors.toList());
     }
 
-    @Transactional
-    public BookDTO save(BookDTO bookDTO, MultipartFile file) {
-        validateFile(file);
+    public BookDTO save(BookRequestDTO bookDTO) {
 
-        var bookEntity = bookMapper.bookDTOtoBook(bookDTO);
+        var bookEntity = bookMapper.toBook(bookDTO);
         var savedBook = bookRepository.save(bookEntity);
 
-        var upload = googleDriveService.uploadFile(savedBook.getId().toString(), file);
+        return bookMapper.toDTO(savedBook);
+    }
 
-        savedBook.setUploadId(upload.id());
-        savedBook.setViewLink(upload.viewLink());
+    public String uploadPdf(UUID id, MultipartFile file) {
+        validateFile(file);
+        var book = bookRepository.findById(id);
 
-        var updatedBook = bookRepository.save(savedBook);
+        BookUpload bookUpload = book.map(value -> googleDriveService.uploadFile(value.getId().toString(), file))
+                .orElseThrow(
+                        () -> new CommonException(HttpStatus.NOT_FOUND,  "booksy.book.uploadPdf.notFound", "Book not found"));
 
-        return bookMapper.bookToBookDTO(updatedBook);
+        book.get().setUploadId(bookUpload.id());
+        book.get().setViewLink(bookUpload.viewLink());
+
+        bookRepository.save(book.get());
+
+        return bookUpload.viewLink();
     }
 
     private void validateFile(MultipartFile file) {
@@ -69,8 +77,8 @@ public class BookService {
     public BookDTO update(BookDTO bookDTO) {
         try {
             bookDTO.setId(null);
-            var updatedBook = bookRepository.save(bookMapper.bookDTOtoBook(bookDTO));
-            return bookMapper.bookToBookDTO(updatedBook);
+            var updatedBook = bookRepository.save(bookMapper.toBook(bookDTO));
+            return bookMapper.toDTO(updatedBook);
         } catch (Exception e) {
             throw new CommonException(HttpStatus.BAD_REQUEST, "booksy.book.save.badRequest", "Error while updating book");
         }

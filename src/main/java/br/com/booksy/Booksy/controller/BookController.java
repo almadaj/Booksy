@@ -1,9 +1,14 @@
 package br.com.booksy.Booksy.controller;
 
 import br.com.booksy.Booksy.domain.dto.BookDTO;
+import br.com.booksy.Booksy.domain.dto.BookRequestDTO;
 import br.com.booksy.Booksy.service.BookService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,10 +33,23 @@ public class BookController {
     }
 
     @PostMapping
-    public BookDTO save(
-            @RequestPart("file") MultipartFile file,
-            @RequestPart("book") @Valid BookDTO bookDTO) {
-        return bookService.save(bookDTO, file);
+    public BookDTO save(@RequestBody @Valid BookRequestDTO bookDTO) {
+        return bookService.save(bookDTO);
+    }
+
+    @PutMapping(value = "/upload/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String uploadPdf(
+            @PathVariable UUID id,
+            @Parameter(
+                    name = "file",
+                    description = "PDF File",
+                    required = true,
+                    content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE,
+                            schema = @Schema(type = "string", format = "binary"))
+            )
+            @RequestPart("file") MultipartFile file) {
+
+        return bookService.uploadPdf(id, file);
     }
 
     @PutMapping
