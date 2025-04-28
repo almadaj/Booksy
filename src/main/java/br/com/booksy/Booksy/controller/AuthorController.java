@@ -3,6 +3,7 @@ package br.com.booksy.Booksy.controller;
 import br.com.booksy.Booksy.domain.dto.AuthorDTO;
 import br.com.booksy.Booksy.domain.model.Author;
 import br.com.booksy.Booksy.service.AuthorService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Author")
 @RestController
 @RequestMapping("/api/v1/authors")
 @RequiredArgsConstructor

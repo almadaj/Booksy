@@ -3,6 +3,7 @@ package br.com.booksy.Booksy.controller;
 import br.com.booksy.Booksy.domain.dto.CategoryDTO;
 import br.com.booksy.Booksy.domain.model.Category;
 import br.com.booksy.Booksy.service.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Category")
 @RestController
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
