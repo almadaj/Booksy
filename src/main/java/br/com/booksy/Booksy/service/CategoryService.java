@@ -25,7 +25,7 @@ public class CategoryService {
 
     public Category findById(UUID id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new CommonException("Category not found"));
+                .orElseThrow(() -> new CommonException(HttpStatus.NOT_FOUND, "booksy.author.findById.notFound","Category not found"));
     }
 
     @Transactional

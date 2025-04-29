@@ -25,7 +25,7 @@ public class AuthorService {
 
     public Author findById(UUID id) {
         return authorRepository.findById(id)
-                .orElseThrow(() -> new CommonException("Author not found"));
+                .orElseThrow(() -> new CommonException(HttpStatus.NOT_FOUND, "booksy.author.findById.notFound", "Author not found"));
     }
 
     @Transactional

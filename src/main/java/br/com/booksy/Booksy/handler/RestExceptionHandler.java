@@ -1,5 +1,6 @@
 package br.com.booksy.Booksy.handler;
 
+import br.com.booksy.Booksy.domain.dto.MessageDTO;
 import br.com.booksy.Booksy.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,14 +21,8 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(CommonException.class)
-    public ResponseEntity<CommonExceptionDetails> handleCommonException(CommonException ex) {
-        return new ResponseEntity<>(
-                CommonExceptionDetails.builder()
-                        .status(HttpStatus.BAD_REQUEST.value())
-                        .title("Bad request")
-                        .details(ex.getMessage())
-                        .build(), HttpStatus.BAD_REQUEST
-        );
+    public ResponseEntity<MessageDTO> handleCommonException(CommonException ex) {
+        return ex.getMessageError();
     }
 
     @Override
