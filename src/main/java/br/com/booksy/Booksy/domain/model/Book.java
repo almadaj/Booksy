@@ -8,23 +8,29 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name="users")
-public class User {
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(length = 150, nullable = false)
-    private String name;
+    @Column(nullable = false, length = 150)
+    private String title;
 
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
+    @Column(unique = true)
+    private String isbn;
 
     @Column(nullable = false)
-    private Boolean isAdmin;
+    private Integer pagesNumber;
+
+    @Column(nullable = false)
+    private Integer releaseDate;
+
+    /*@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    private Author author;*/
+
+    @Column(length = 100)
+    private String uploadId;
 
     private LocalDateTime createdAt;
 
@@ -41,5 +47,4 @@ public class User {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
 }
