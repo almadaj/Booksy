@@ -8,4 +8,5 @@ import lombok.experimental.SuperBuilder;
 public class ExceptionDetails {
     protected String title;
     protected int status;
+    protected String details;
 }
