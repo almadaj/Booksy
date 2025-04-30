@@ -24,6 +24,6 @@ public class CommonException extends RuntimeException {
         this.key = key;
         this.text = text;
     }
-  }
 }
+
 
