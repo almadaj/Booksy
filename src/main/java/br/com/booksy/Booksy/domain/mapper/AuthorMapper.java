@@ -1,11 +1,11 @@
-package br.com.booksy.Booksy.mapper;
+package br.com.booksy.Booksy.domain.mapper;
 
 import br.com.booksy.Booksy.domain.dto.AuthorDTO;
 import br.com.booksy.Booksy.domain.model.Author;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public abstract class AuthorMapper {
     public static final AuthorMapper INSTANCE = Mappers.getMapper(AuthorMapper.class);
 
