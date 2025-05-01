@@ -4,7 +4,7 @@ import br.com.booksy.Booksy.domain.dto.ReadingDTO;
 import br.com.booksy.Booksy.domain.model.Reading;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ReadingMapper {
     Reading readingDTOtoReading(ReadingDTO readingDTO);
     ReadingDTO readingToReadingDTO(Reading Reading);

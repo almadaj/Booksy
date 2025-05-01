@@ -3,13 +3,12 @@ package br.com.booksy.Booksy.service;
 import br.com.booksy.Booksy.domain.dto.CategoryDTO;
 import br.com.booksy.Booksy.domain.model.Category;
 import br.com.booksy.Booksy.exception.CommonException;
-import br.com.booksy.Booksy.mapper.CategoryMapper;
+import br.com.booksy.Booksy.domain.mapper.CategoryMapper;
 import br.com.booksy.Booksy.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
