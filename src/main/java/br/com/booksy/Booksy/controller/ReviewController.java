@@ -1,5 +1,5 @@
 package br.com.booksy.Booksy.controller;
-import br.com.booksy.Booksy.domain.dto.ReviewDTO;
+import br.com.booksy.Booksy.domain.dto.ReviewRequestDTO;
 import br.com.booksy.Booksy.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,18 +13,18 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/{id}")
-    public ReviewDTO findReviewById(UUID id){
+    public ReviewRequestDTO findReviewById(UUID id){
         return reviewService.findReviewById(id);
     }
 
     @PostMapping()
-    public ReviewDTO save(@RequestBody ReviewDTO reviewDTO){
-        return reviewService.save(reviewDTO);
+    public ReviewRequestDTO save(@RequestBody ReviewRequestDTO reviewRequestDTO){
+        return reviewService.save(reviewRequestDTO);
     }
 
-    @PutMapping()
-    public ReviewDTO update(@RequestBody ReviewDTO reviewDTO){
-        return reviewService.update(reviewDTO);
+    @PutMapping("/{id}")
+    public ReviewRequestDTO update(@RequestBody ReviewRequestDTO reviewRequestDTO){
+        return reviewService.update(reviewRequestDTO);
     }
 
     @DeleteMapping("/{id}")

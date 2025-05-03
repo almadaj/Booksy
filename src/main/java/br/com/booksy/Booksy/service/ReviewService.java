@@ -1,6 +1,6 @@
 package br.com.booksy.Booksy.service;
 
-import br.com.booksy.Booksy.domain.dto.ReviewDTO;
+import br.com.booksy.Booksy.domain.dto.ReviewRequestDTO;
 import br.com.booksy.Booksy.domain.mapper.ReviewMapper;
 import br.com.booksy.Booksy.exception.CommonException;
 import br.com.booksy.Booksy.repository.ReviewRepository;
@@ -15,25 +15,25 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private ReviewMapper reviewMapper;
 
-    public ReviewDTO findReviewById(UUID id){
+    public ReviewRequestDTO findReviewById(UUID id){
         return reviewRepository.findById(id)
                 .map(review -> reviewMapper.reviewToReviewDTO(review))
                 .orElseThrow(
                         () -> new CommonException(HttpStatus.NOT_FOUND,  "booksy.book.findById.notFound", "Review not found"));
     }
 
-    public ReviewDTO save(ReviewDTO reviewDTO){
+    public ReviewRequestDTO save(ReviewRequestDTO reviewRequestDTO){
         try{
-            var newReading = reviewRepository.save(reviewMapper.reviewDTOtoReview(reviewDTO));
+            var newReading = reviewRepository.save(reviewMapper.reviewDTOtoReview(reviewRequestDTO));
             return reviewMapper.reviewToReviewDTO(newReading);
         } catch (Exception e) {
             throw new CommonException(HttpStatus.BAD_REQUEST, "booksy.book.save.badRequest", "Error while saving review");
         }
     }
 
-    public ReviewDTO update(ReviewDTO reviewDTO) {
+    public ReviewRequestDTO update(ReviewRequestDTO reviewRequestDTO) {
         try {
-            var updatedReview = reviewRepository.save(reviewMapper.reviewDTOtoReview(reviewDTO));
+            var updatedReview = reviewRepository.save(reviewMapper.reviewDTOtoReview(reviewRequestDTO));
             return reviewMapper.reviewToReviewDTO(updatedReview);
         } catch (Exception e) {
             throw new CommonException(HttpStatus.BAD_REQUEST, "booksy.book.save.badRequest", "Error while updating review");

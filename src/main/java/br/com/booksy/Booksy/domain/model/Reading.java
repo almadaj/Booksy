@@ -7,27 +7,27 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "reading")
+@Table(name = "readings")
 public class Reading {
     @Id
     @GeneratedValue
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-//    @NotNull
-//    @Column(name = "userId", nullable = false)
-//    private UUID userId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    private User user;
 
-//    @NotNull
-//    @Column(name = "bookId", nullable = false)
-//    private UUID bookId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "bookId", referencedColumnName = "id")
+    private Book book;
 
     @Min(0)
     @Column()
@@ -35,10 +35,8 @@ public class Reading {
 
     @NotNull
     @Column()
-    private Date startDate;
+    private LocalDateTime startDate;
 
     @Column()
-    private Date endDate;
-
-
+    private LocalDateTime endDate;
 }

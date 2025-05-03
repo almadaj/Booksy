@@ -26,9 +26,9 @@ public class Book {
     @Column(nullable = false)
     private Integer releaseDate;
 
-    /*@OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "author_id", referencedColumnName = "id")
-    private Author author;*/
+    private Author author;
 
     @Column(length = 100)
     private String uploadId;

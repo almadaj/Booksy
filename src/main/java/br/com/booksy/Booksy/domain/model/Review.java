@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,18 +13,20 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "review")
+@Table(name = "reviews")
 public class Review {
     @Id
     @GeneratedValue
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-//    @Column(name = "userId", nullable = false)
-//    private UUID userId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "userId",  referencedColumnName = "id")
+    private User user;
 
-//    @Column(name = "bookId", nullable = false)
-//    private UUID bookId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "bookId",  referencedColumnName = "id")
+    private Book book;
 
     @Column()
     @NotNull
@@ -42,6 +45,6 @@ public class Review {
 
     @NotNull
     @Column
-    private Date postDate;
+    private LocalDateTime postDate;
 
 }
