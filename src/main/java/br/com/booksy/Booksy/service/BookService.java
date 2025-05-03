@@ -4,9 +4,11 @@ import br.com.booksy.Booksy.domain.dto.BookDTO;
 import br.com.booksy.Booksy.domain.dto.BookRequestDTO;
 import br.com.booksy.Booksy.domain.dto.BookUpload;
 import br.com.booksy.Booksy.domain.mapper.BookMapper;
+import br.com.booksy.Booksy.domain.model.Book;
 import br.com.booksy.Booksy.exception.CommonException;
 import br.com.booksy.Booksy.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -40,28 +42,40 @@ public class BookService {
     }
 
     public BookDTO save(BookRequestDTO bookDTO) {
+        try {
+            var bookEntity = bookMapper.toBook(bookDTO);
+            var savedBook = bookRepository.save(bookEntity);
 
-        var bookEntity = bookMapper.toBook(bookDTO);
-        var savedBook = bookRepository.save(bookEntity);
-
-        return bookMapper.toDTO(savedBook);
+            return bookMapper.toDTO(savedBook);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new CommonException(HttpStatus.CONFLICT, "booksy.book.save.conflict", "A conflict occurred while saving the book. It may already exist or violate database constraints.");
+        }
+        catch (Exception e) {
+            throw new CommonException(HttpStatus.BAD_REQUEST, "booksy.book.save.badRequest", "Error while saving book");
+        }
     }
 
     public String uploadPdf(UUID id, MultipartFile file) {
         validateFile(file);
-        var book = bookRepository.findById(id);
 
-        BookUpload bookUpload = book.map(value -> googleDriveService.uploadFile(value.getId().toString(), file))
-                .orElseThrow(
-                        () -> new CommonException(HttpStatus.NOT_FOUND,  "booksy.book.uploadPdf.notFound", "Book not found"));
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new CommonException(
+                        HttpStatus.NOT_FOUND,
+                        "booksy.book.uploadPdf.notFound",
+                        "Book not found"
+                ));
 
-        book.get().setUploadId(bookUpload.id());
-        book.get().setViewLink(bookUpload.viewLink());
+        BookUpload bookUpload = googleDriveService.uploadFile(book.getId().toString(), file);
 
-        bookRepository.save(book.get());
+        book.setUploadId(bookUpload.id());
+        book.setViewLink(bookUpload.viewLink());
+
+        bookRepository.save(book);
 
         return bookUpload.viewLink();
     }
+
 
     private void validateFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
@@ -69,7 +83,7 @@ public class BookService {
         }
 
         if (!MediaType.APPLICATION_PDF_VALUE.equalsIgnoreCase(file.getContentType())) {
-            throw new CommonException(HttpStatus.BAD_REQUEST, "booksy.book.save.badRequest", "Only PDF files are allowed.");
+            throw new CommonException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "booksy.book.save.badRequest", "Only PDF files are allowed.");
         }
     }
 
@@ -84,8 +98,9 @@ public class BookService {
     }
 
     public void deleteById(UUID id) {
-        var book = bookRepository.findById(id);
-        book.ifPresent(value -> googleDriveService.deleteFile(value.getUploadId()));
-        bookRepository.deleteById(id);
+        bookRepository.findById(id).ifPresent(book -> {
+            googleDriveService.deleteFile(book.getUploadId());
+            bookRepository.deleteById(id);
+        });
     }
 }

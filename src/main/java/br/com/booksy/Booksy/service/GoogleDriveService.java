@@ -1,7 +1,9 @@
 package br.com.booksy.Booksy.service;
 
 import br.com.booksy.Booksy.domain.dto.BookUpload;
+import br.com.booksy.Booksy.exception.CommonException;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
@@ -11,6 +13,7 @@ import com.google.api.services.drive.model.Permission;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,12 +40,12 @@ public class GoogleDriveService {
                 .build();
     }
 
-    public BookUpload uploadFile(String name, MultipartFile multipartFile) {
+    public BookUpload uploadFile(String fileName, MultipartFile multipartFile) {
         try {
             Drive driveService = getDriveService();
 
             File fileMetadata = new File();
-            fileMetadata.setName(name);
+            fileMetadata.setName(fileName);
             fileMetadata.setParents(Collections.singletonList(sharedFolderId));
 
             InputStreamContent mediaContent = new InputStreamContent(
@@ -64,18 +67,31 @@ public class GoogleDriveService {
                     .execute();
 
             return new BookUpload(uploadedFile.getId(), uploadedFile.getWebViewLink());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        }
+        catch (GoogleJsonResponseException e) {
+            if (e.getStatusCode() == 403) {
+                throw new CommonException(HttpStatus.FORBIDDEN, "booksy.book.upload.forbidden", "Access denied during upload");
+            }
+            throw new CommonException(HttpStatus.INTERNAL_SERVER_ERROR, "booksy.book.upload.error", "Google Drive error");
+        }
+        catch (Exception e) {
+            throw new CommonException(HttpStatus.INTERNAL_SERVER_ERROR, "booksy.book.upload.error", "Unexpected error during file upload");
         }
     }
 
     public void deleteFile(String fileId) {
         try {
             Drive driveService = getDriveService();
-
             driveService.files().delete(fileId).execute();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        }
+        catch (GoogleJsonResponseException e) {
+            if (e.getStatusCode() == 403) {
+                throw new CommonException(HttpStatus.FORBIDDEN, "booksy.book.upload.forbidden", "Access denied during upload");
+            }
+            throw new CommonException(HttpStatus.INTERNAL_SERVER_ERROR, "booksy.book.upload.error", "Google Drive error");
+        }
+        catch (Exception e) {
+            throw new CommonException(HttpStatus.INTERNAL_SERVER_ERROR, "booksy.book.upload.error", "Unexpected error during file deletion with id = " + fileId);
         }
     }
 }

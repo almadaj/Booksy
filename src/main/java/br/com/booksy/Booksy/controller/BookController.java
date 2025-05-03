@@ -37,7 +37,7 @@ public class BookController {
         return bookService.save(bookDTO);
     }
 
-    @PutMapping(value = "/upload/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/{id}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String uploadPdf(
             @PathVariable UUID id,
             @Parameter(
