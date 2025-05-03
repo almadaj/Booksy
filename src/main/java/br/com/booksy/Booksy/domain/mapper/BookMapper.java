@@ -5,7 +5,7 @@ import br.com.booksy.Booksy.domain.dto.BookRequestDTO;
 import br.com.booksy.Booksy.domain.model.Book;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface BookMapper {
     Book toBook(BookDTO bookDTO);
     Book toBook(BookRequestDTO bookRequestDTO);

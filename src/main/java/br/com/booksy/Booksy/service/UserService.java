@@ -43,7 +43,7 @@ public class UserService {
             var newUser = userRepository.save(userMapper.userRequestDTOtoUser(userDTO));
             return userMapper.userToUserResponseDTO(newUser);
         } catch (Exception e) {
-            throw new CommonException(HttpStatus.BAD_REQUEST, "booksy.user.save.badRequest", e.getMessage());
+            throw new CommonException(HttpStatus.BAD_REQUEST, "booksy.user.save.badRequest", "Error while saving user");
         }
     }
 

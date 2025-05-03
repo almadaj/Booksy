@@ -3,6 +3,7 @@ package br.com.booksy.Booksy.exception;
 import br.com.booksy.Booksy.domain.dto.MessageDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.Serial;
 
@@ -24,3 +25,5 @@ public class CommonException extends RuntimeException {
         this.text = text;
     }
 }
+
+
