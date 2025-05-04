@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -21,4 +23,7 @@ public class Category {
 
     @Column(length = 150, nullable = false, unique = true)
     private String name;
+
+    @ManyToMany(mappedBy = "categories")
+    private Set<Book> books = new HashSet<>();
 }

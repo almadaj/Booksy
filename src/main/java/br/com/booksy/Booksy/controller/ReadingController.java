@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-//@RequestMapping("/api/v1/readings")
-@RequestMapping("/api/v1/users/{userId}/readings")
+@RequestMapping("/api/v1/readings")
 @RequiredArgsConstructor
 public class ReadingController {
     private final ReadingService readingService;
@@ -26,7 +25,7 @@ public class ReadingController {
 
     @PutMapping("/{id}")
     public ReadingRequestDTO update(@PathVariable UUID id, @RequestBody ReadingRequestDTO readingRequestDTO){
-//        readingRequestDTO.setUserId(id);
+        readingRequestDTO.setId(id);
         return readingService.update(readingRequestDTO);
     }
 

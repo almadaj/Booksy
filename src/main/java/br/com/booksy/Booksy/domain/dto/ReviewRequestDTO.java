@@ -8,6 +8,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class ReviewRequestDTO {
+    private UUID id;
     @NotNull()
     private UUID userId;
 

@@ -1,18 +1,18 @@
 package br.com.booksy.Booksy.domain.dto;
 
-import br.com.booksy.Booksy.domain.model.Author;
+import br.com.booksy.Booksy.domain.model.Book;
 import br.com.booksy.Booksy.domain.model.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Data
 @Builder
 public class ReadingResponseDTO {
+    private UUID id;
     @NotNull()
     private UUID userId;
 
@@ -26,5 +26,5 @@ public class ReadingResponseDTO {
     private LocalDateTime endDate;
 
     private User user;
-    private Author author;
+    private Book book;
 }
