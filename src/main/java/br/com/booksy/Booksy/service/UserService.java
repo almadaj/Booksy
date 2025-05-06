@@ -32,7 +32,7 @@ public class UserService {
     }
 
     public List<UserResponseDTO> findAll(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
+        Pageable pageable = PageRequest.of(page, size);
         return this.userRepository.findAll(pageable).stream().map(userMapper::userToUserResponseDTO).collect(Collectors.toList());
     }
 
