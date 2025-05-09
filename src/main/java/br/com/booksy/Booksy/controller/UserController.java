@@ -3,44 +3,47 @@ package br.com.booksy.Booksy.controller;
 import br.com.booksy.Booksy.domain.dto.UserRequestDTO;
 import br.com.booksy.Booksy.domain.dto.UserResponseDTO;
 import br.com.booksy.Booksy.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "User")
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
     @GetMapping("/{id}")
-    public UserResponseDTO findUserById(@PathVariable UUID id) {
-        return userService.findById(id);
+    public ResponseEntity<UserResponseDTO> findUserById(@PathVariable UUID id) {
+        return ResponseEntity.ok(userService.findById(id));
     }
 
     @GetMapping
-    public List<UserResponseDTO> findAll(@RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "10") int size) {
-        return userService.findAll(page, size);
+    public ResponseEntity<List<UserResponseDTO>> findAll() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @PostMapping
-    public UserResponseDTO save(@RequestBody @Valid UserRequestDTO user) {
-        return userService.save(user);
+    public ResponseEntity<UserResponseDTO> save(@RequestBody @Valid UserRequestDTO user) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
     }
 
-    @PutMapping
-    public UserResponseDTO update(@RequestBody @Valid UserRequestDTO user) {
-        return userService.update(user);
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> update(@PathVariable UUID id, @RequestBody @Valid UserRequestDTO user) {
+        return ResponseEntity.ok(userService.update(id, user));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         userService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
-
 }
 

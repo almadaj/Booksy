@@ -1,5 +1,7 @@
 package br.com.booksy.Booksy.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +11,10 @@ import java.util.Set;
 import java.util.UUID;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "books")
 public class Book {
     @Id
@@ -28,8 +33,8 @@ public class Book {
     @Column(nullable = false)
     private Integer releaseDate;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    @ManyToOne()
+    @JoinColumn(name = "author_id")
     private Author author;
 
     @Column(length = 100)
@@ -37,14 +42,16 @@ public class Book {
 
     @ManyToMany
     @JoinTable(
-            name = "book_category",
+            name = "book_categories",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories = new HashSet<>();
 
+    @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @PrePersist

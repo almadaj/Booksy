@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "readings")
 public class Reading {
     @Id
@@ -21,22 +23,38 @@ public class Reading {
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "userId", referencedColumnName = "id")
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "bookId", referencedColumnName = "id")
+    @ManyToOne()
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @Min(0)
     @Column()
     private int currentPage;
 
-    @NotNull
     @Column()
     private LocalDateTime startDate;
 
     @Column()
     private LocalDateTime endDate;
+
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

@@ -3,6 +3,7 @@ package br.com.booksy.Booksy.service;
 import br.com.booksy.Booksy.domain.dto.UserRequestDTO;
 import br.com.booksy.Booksy.domain.dto.UserResponseDTO;
 import br.com.booksy.Booksy.domain.mapper.UserMapper;
+import br.com.booksy.Booksy.domain.model.User;
 import br.com.booksy.Booksy.exception.CommonException;
 import br.com.booksy.Booksy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +32,17 @@ public class UserService {
         );
     }
 
-    public List<UserResponseDTO> findAll(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return this.userRepository.findAll(pageable).stream().map(userMapper::userToUserResponseDTO).collect(Collectors.toList());
+    public User findUserById (UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new CommonException(HttpStatus.NOT_FOUND,  "booksy.user.findById.notFound", "User not found"));
+    }
+
+    public List<UserResponseDTO> findAll() {
+        return this.userRepository.findAll().stream().map(userMapper::userToUserResponseDTO).collect(Collectors.toList());
     }
 
     public UserResponseDTO save(UserRequestDTO userDTO) {
         try {
-            userDTO.setId(null);
             userDTO.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
             var newUser = userRepository.save(userMapper.userRequestDTOtoUser(userDTO));
             return userMapper.userToUserResponseDTO(newUser);
@@ -47,9 +51,14 @@ public class UserService {
         }
     }
 
-    public UserResponseDTO update(UserRequestDTO userDTO) {
+    public UserResponseDTO update(UUID id, UserRequestDTO userDTO) {
         try {
-            var updatedUser = userRepository.save(userMapper.userRequestDTOtoUser(userDTO));
+            User savedUser = findUserById(id);
+            User user = userMapper.userRequestDTOtoUser(userDTO);
+            user.setId(savedUser.getId());
+            user.setCreatedAt(savedUser.getCreatedAt());
+            user.setUpdatedAt(savedUser.getUpdatedAt());
+            User updatedUser = userRepository.save(user);
             return userMapper.userToUserResponseDTO(updatedUser);
         } catch (Exception e) {
             throw new CommonException(HttpStatus.BAD_REQUEST, "booksy.user.save.badRequest", "Error while updating user");

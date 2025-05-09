@@ -6,7 +6,7 @@ import br.com.booksy.Booksy.domain.model.User;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper {
-    User userRequestDTOtoUser(UserRequestDTO userRequestDTO);
-    UserResponseDTO userToUserResponseDTO(User user);
+public abstract class UserMapper {
+    public abstract User userRequestDTOtoUser(UserRequestDTO userRequestDTO);
+    public abstract UserResponseDTO userToUserResponseDTO(User user);
 }

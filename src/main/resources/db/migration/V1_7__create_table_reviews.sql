@@ -5,7 +5,9 @@ CREATE TABLE reviews (
     rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
     title VARCHAR(100) NOT NULL,
     text_post VARCHAR(2000) NOT NULL,
-    post_date TIMESTAMP NOT NULL,
+    post_date TIMESTAMP,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (book_id) REFERENCES books(id)
 );

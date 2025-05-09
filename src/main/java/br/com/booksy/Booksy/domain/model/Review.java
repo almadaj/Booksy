@@ -13,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "reviews")
 public class Review {
     @Id
@@ -20,12 +21,12 @@ public class Review {
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "userId",  referencedColumnName = "id")
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "bookId",  referencedColumnName = "id")
+    @ManyToOne()
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @Column()
@@ -43,8 +44,23 @@ public class Review {
     @Column(length = 2000)
     private String textPost;
 
-    @NotNull
     @Column
     private LocalDateTime postDate;
 
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

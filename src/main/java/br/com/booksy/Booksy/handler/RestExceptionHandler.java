@@ -42,14 +42,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
-        ExceptionDetails exceptionDetails = ExceptionDetails.builder()
-                .status(statusCode.value())
-                .title("Unhandled exception: " + ex.getClass().getName())
-                .details(ex.getMessage())
-                .build();
-
-        return new ResponseEntity<>(exceptionDetails, headers, statusCode);
-    }
+//    @Override
+//    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+//        ExceptionDetails exceptionDetails = ExceptionDetails.builder()
+//                .status(statusCode.value())
+//                .title("Unhandled exception: " + ex.getClass().getName())
+//                .details(ex.getMessage())
+//                .build();
+//
+//        return new ResponseEntity<>(exceptionDetails, headers, statusCode);
+//    }
 }
