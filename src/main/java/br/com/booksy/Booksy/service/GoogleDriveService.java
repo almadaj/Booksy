@@ -12,6 +12,8 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.Permission;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ import java.util.Collections;
 @Service
 public class GoogleDriveService {
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    private static final Logger log = LoggerFactory.getLogger(GoogleDriveService.class);
 
     @Value("${google.drive.shared-folder-id}")
     private String sharedFolderId;
@@ -69,12 +72,14 @@ public class GoogleDriveService {
             return new BookUpload(uploadedFile.getId(), uploadedFile.getWebViewLink());
         }
         catch (GoogleJsonResponseException e) {
+            log.error(e.getMessage());
             if (e.getStatusCode() == 403) {
                 throw new CommonException(HttpStatus.FORBIDDEN, "booksy.book.upload.forbidden", "Access denied during upload");
             }
             throw new CommonException(HttpStatus.INTERNAL_SERVER_ERROR, "booksy.book.upload.error", "Google Drive error");
         }
         catch (Exception e) {
+            log.error(e.getMessage());
             throw new CommonException(HttpStatus.INTERNAL_SERVER_ERROR, "booksy.book.upload.error", "Unexpected error during file upload");
         }
     }
@@ -85,12 +90,14 @@ public class GoogleDriveService {
             driveService.files().delete(fileId).execute();
         }
         catch (GoogleJsonResponseException e) {
+            log.error(e.getMessage());
             if (e.getStatusCode() == 403) {
                 throw new CommonException(HttpStatus.FORBIDDEN, "booksy.book.upload.forbidden", "Access denied during upload");
             }
             throw new CommonException(HttpStatus.INTERNAL_SERVER_ERROR, "booksy.book.upload.error", "Google Drive error");
         }
         catch (Exception e) {
+            log.error(e.getMessage());
             throw new CommonException(HttpStatus.INTERNAL_SERVER_ERROR, "booksy.book.upload.error", "Unexpected error during file deletion with id = " + fileId);
         }
     }
