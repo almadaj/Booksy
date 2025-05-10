@@ -3,11 +3,13 @@ package br.com.booksy.Booksy.domain.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.UUID;
 
 @Data
+@Builder
 public class UserRequestDTO {
     @NotBlank(message = "name cannot be empty")
     @NotNull(message = "name canot be empty")

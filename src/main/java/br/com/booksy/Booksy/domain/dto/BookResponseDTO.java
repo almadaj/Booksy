@@ -3,6 +3,7 @@ package br.com.booksy.Booksy.domain.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -14,6 +15,6 @@ public class BookResponseDTO {
     private String uploadId;
     private Integer pagesNumber;
     private Integer releaseDate;
-/*    private AuthorResponseDTO author;
-    private List<CategoryResponseDTO> categories;*/
+    private AuthorResponseDTO author;
+    private List<CategoryResponseDTO> categories;
 }

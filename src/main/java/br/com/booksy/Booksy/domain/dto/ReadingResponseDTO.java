@@ -14,8 +14,7 @@ import java.util.UUID;
 public class ReadingResponseDTO {
     private UUID id;
     private int currentPage;
-//    private LocalDateTime startDate;
-//    private LocalDateTime endDate;
-//    private User user;
-//    private Book book;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private BookResponseLowDTO book;
 }

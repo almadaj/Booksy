@@ -7,11 +7,7 @@ import java.util.UUID;
 
 @Data
 @Builder
-public class ReviewResponseDTO {
+public class BookResponseLowDTO {
     private UUID id;
-    private int rating;
     private String title;
-    private String textPost;
-    private UserResponseLowDTO user;
-    private BookResponseLowDTO book;
 }

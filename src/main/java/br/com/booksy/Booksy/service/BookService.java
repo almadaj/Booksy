@@ -7,9 +7,6 @@ import br.com.booksy.Booksy.domain.model.Book;
 import br.com.booksy.Booksy.exception.CommonException;
 import br.com.booksy.Booksy.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +23,7 @@ public class BookService {
     public BookResponseDTO findById(UUID id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new CommonException(HttpStatus.NOT_FOUND,  "booksy.book.findById.notFound", "Book not found"));
-        return bookMapper.booktoBookResponseDTO(book);
+        return bookMapper.bookToBookResponseDTO(book);
     }
 
     public Book findBookById(UUID id) {
@@ -37,13 +34,13 @@ public class BookService {
     public List<BookResponseDTO> findAll() {
         return bookRepository.findAll()
                 .stream()
-                .map(bookMapper::booktoBookResponseDTO)
+                .map(bookMapper::bookToBookResponseDTO)
                 .collect(Collectors.toList());
     }
 
     public BookResponseDTO save(BookDTO bookDTO) {
         Book savedBook = bookRepository.save(bookMapper.bookDTOtoBook(bookDTO));
-        return bookMapper.booktoBookResponseDTO(savedBook);
+        return bookMapper.bookToBookResponseDTO(savedBook);
     }
 
     public BookResponseDTO update(UUID id, BookDTO bookDTO) {
@@ -54,7 +51,7 @@ public class BookService {
             book.setCreatedAt(savedBook.getCreatedAt());
             book.setUpdatedAt(savedBook.getUpdatedAt());
             Book updatedBook = bookRepository.save(book);
-            return bookMapper.booktoBookResponseDTO(updatedBook);
+            return bookMapper.bookToBookResponseDTO(updatedBook);
         } catch (Exception e) {
             throw new CommonException(HttpStatus.BAD_REQUEST, "booksy.book.save.badRequest", "Error while updating book");
         }

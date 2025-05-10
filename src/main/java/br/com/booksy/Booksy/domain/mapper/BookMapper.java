@@ -2,6 +2,7 @@ package br.com.booksy.Booksy.domain.mapper;
 
 import br.com.booksy.Booksy.domain.dto.BookDTO;
 import br.com.booksy.Booksy.domain.dto.BookResponseDTO;
+import br.com.booksy.Booksy.domain.dto.BookResponseLowDTO;
 import br.com.booksy.Booksy.domain.model.Author;
 import br.com.booksy.Booksy.domain.model.Book;
 import br.com.booksy.Booksy.domain.model.Category;
@@ -13,10 +14,8 @@ import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class BookMapper {
@@ -30,7 +29,9 @@ public abstract class BookMapper {
     @Mapping(target = "categories", source = "categoryIds", qualifiedByName = "mapCategories")
     public abstract Book bookDTOtoBook(BookDTO bookDTO);
 
-    public abstract BookResponseDTO booktoBookResponseDTO(Book book);
+    public abstract BookResponseDTO bookToBookResponseDTO(Book book);
+
+    public abstract BookResponseLowDTO bookToBookResponseLowDTO(Book book);
 
     @Named("mapAuthor")
     protected Author mapAuthor(UUID authorId) {
