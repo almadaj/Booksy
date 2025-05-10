@@ -1,6 +1,7 @@
 package br.com.booksy.Booksy.service;
 
 import br.com.booksy.Booksy.domain.dto.AuthorDTO;
+import br.com.booksy.Booksy.domain.dto.AuthorResponseDTO;
 import br.com.booksy.Booksy.domain.model.Author;
 import br.com.booksy.Booksy.exception.CommonException;
 import br.com.booksy.Booksy.domain.mapper.AuthorMapper;
@@ -12,36 +13,50 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AuthorService {
     private final AuthorRepository authorRepository;
 
-    public List<Author> findAll() {
-        return authorRepository.findAll();
+    public List<AuthorResponseDTO> findAll() {
+        return authorRepository.findAll()
+                .stream()
+                .map(AuthorMapper.INSTANCE::toAuthorResponseDTO)
+                .collect(Collectors.toList());
     }
 
-    public Author findById(UUID id) {
+    public AuthorResponseDTO findById(UUID id) {
+        Author author = authorRepository.findById(id)
+                .orElseThrow(() -> new CommonException(HttpStatus.NOT_FOUND, "booksy.author.findById.notFound", "Author not found"));
+        return AuthorMapper.INSTANCE.toAuthorResponseDTO(author);
+    }
+
+    public Author findAuthorById(UUID id) {
         return authorRepository.findById(id)
                 .orElseThrow(() -> new CommonException(HttpStatus.NOT_FOUND, "booksy.author.findById.notFound", "Author not found"));
     }
 
     @Transactional
-    public Author save(AuthorDTO authorDTO) {
-        return authorRepository.save(AuthorMapper.INSTANCE.toAuthor(authorDTO));
+    public AuthorResponseDTO save(AuthorDTO authorDTO) {
+        Author savedAuthor = authorRepository.save(AuthorMapper.INSTANCE.toAuthor(authorDTO));
+        return AuthorMapper.INSTANCE.toAuthorResponseDTO(savedAuthor);
     }
 
     @Transactional
-    public Author update(UUID id, AuthorDTO authorDTO) {
-        Author savedAuthor = findById(id);
+    public AuthorResponseDTO update(UUID id, AuthorDTO authorDTO) {
+        Author savedAuthor = findAuthorById(id);
         Author author = AuthorMapper.INSTANCE.toAuthor(authorDTO);
         author.setId(savedAuthor.getId());
-        return authorRepository.save(author);
+        author.setCreatedAt(savedAuthor.getCreatedAt());
+        author.setUpdatedAt(savedAuthor.getUpdatedAt());
+        Author updatedAuthor = authorRepository.save(author);
+        return AuthorMapper.INSTANCE.toAuthorResponseDTO(updatedAuthor);
     }
 
     @Transactional
     public void delete(UUID id) {
-        authorRepository.delete(findById(id));
+        authorRepository.delete(findAuthorById(id));
     }
 }

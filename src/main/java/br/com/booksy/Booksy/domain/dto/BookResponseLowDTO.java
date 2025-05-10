@@ -7,9 +7,7 @@ import java.util.UUID;
 
 @Data
 @Builder
-public class UserResponseDTO {
+public class BookResponseLowDTO {
     private UUID id;
-    private String name;
-    private String email;
-    private Boolean isAdmin;
+    private String title;
 }

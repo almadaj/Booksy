@@ -5,25 +5,30 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "review")
+@Builder
+@Table(name = "reviews")
 public class Review {
     @Id
     @GeneratedValue
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-//    @Column(name = "userId", nullable = false)
-//    private UUID userId;
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
 
-//    @Column(name = "bookId", nullable = false)
-//    private UUID bookId;
+    @ManyToOne()
+    @JoinColumn(name = "book_id")
+    private Book book;
 
     @Column()
     @NotNull
@@ -40,8 +45,23 @@ public class Review {
     @Column(length = 2000)
     private String textPost;
 
-    @NotNull
     @Column
-    private Date postDate;
+    private LocalDateTime postDate;
 
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

@@ -1,11 +1,40 @@
 package br.com.booksy.Booksy.domain.mapper;
 
-import br.com.booksy.Booksy.domain.dto.ReviewDTO;
+import br.com.booksy.Booksy.domain.dto.ReviewRequestDTO;
+import br.com.booksy.Booksy.domain.dto.ReviewResponseDTO;
+import br.com.booksy.Booksy.domain.model.Book;
 import br.com.booksy.Booksy.domain.model.Review;
+import br.com.booksy.Booksy.domain.model.User;
+import br.com.booksy.Booksy.service.BookService;
+import br.com.booksy.Booksy.service.UserService;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.UUID;
 
 @Mapper(componentModel = "spring")
-public interface ReviewMapper {
-    Review reviewDTOtoReview(ReviewDTO reviewDTO);
-    ReviewDTO reviewToReviewDTO(Review review);
+public abstract class ReviewMapper {
+    @Autowired
+    protected BookService bookService;
+
+    @Autowired
+    protected UserService userService;
+
+    @Mapping(target = "book", source = "bookId", qualifiedByName = "mapBook")
+    @Mapping(target = "user", source = "userId", qualifiedByName = "mapUser")
+    public abstract Review reviewRequestDTOtoReview(ReviewRequestDTO reviewRequestDTO);
+
+    public abstract ReviewResponseDTO reviewToReviewResponseDTO(Review review);
+
+    @Named("mapBook")
+    protected Book mapBook(UUID bookId) {
+        return bookService.findBookById(bookId);
+    }
+
+    @Named("mapUser")
+    protected User mapUser(UUID userId) {
+        return userService.findUserById(userId);
+    }
 }

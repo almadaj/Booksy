@@ -1,6 +1,7 @@
 package br.com.booksy.Booksy.controller;
 
 import br.com.booksy.Booksy.domain.dto.AuthorDTO;
+import br.com.booksy.Booksy.domain.dto.AuthorResponseDTO;
 import br.com.booksy.Booksy.domain.model.Author;
 import br.com.booksy.Booksy.service.AuthorService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,22 +22,22 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @GetMapping
-    public ResponseEntity<List<Author>> findAll() {
+    public ResponseEntity<List<AuthorResponseDTO>> findAll() {
         return ResponseEntity.ok(authorService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Author> findById(@PathVariable UUID id) {
+    public ResponseEntity<AuthorResponseDTO> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(authorService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Author> save(@RequestBody @Valid AuthorDTO author) {
+    public ResponseEntity<AuthorResponseDTO> save(@RequestBody @Valid AuthorDTO author) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authorService.save(author));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Author> update(@PathVariable UUID id, @RequestBody @Valid AuthorDTO author) {
+    public ResponseEntity<AuthorResponseDTO> update(@PathVariable UUID id, @RequestBody @Valid AuthorDTO author) {
         return ResponseEntity.ok(authorService.update(id, author));
     }
 
