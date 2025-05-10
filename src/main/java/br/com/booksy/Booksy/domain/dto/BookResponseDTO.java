@@ -12,7 +12,7 @@ public class BookResponseDTO {
     private UUID id;
     private String title;
     private String isbn;
-    private String uploadId;
+    private String viewLink;
     private Integer pagesNumber;
     private Integer releaseDate;
     private AuthorResponseDTO author;

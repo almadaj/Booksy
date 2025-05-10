@@ -6,6 +6,7 @@ CREATE TABLE books (
     release_date INTEGER NOT NULL,
     author_id UUID,
     upload_id VARCHAR(100),
+    view_link VARCHAR(100),
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     CONSTRAINT fk_books_author FOREIGN KEY (author_id) REFERENCES authors(id)
