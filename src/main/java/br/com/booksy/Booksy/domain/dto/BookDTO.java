@@ -28,6 +28,8 @@ public class BookDTO {
 
     private String uploadId;
 
+    private String viewLink;
+
     @NotNull(message = "pagesNumber cannot be empty")
     private Integer pagesNumber;
 
