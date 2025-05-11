@@ -41,6 +41,9 @@ public class Book {
     @Column(length = 100)
     private String uploadId;
 
+    @Column(length = 100)
+    private String viewLink;
+
     @ManyToMany
     @JoinTable(
             name = "book_categories",

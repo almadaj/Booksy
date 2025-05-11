@@ -6,7 +6,7 @@ import br.com.booksy.Booksy.domain.model.Author;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper()
 public abstract class AuthorMapper {
     public static final AuthorMapper INSTANCE = Mappers.getMapper(AuthorMapper.class);
 

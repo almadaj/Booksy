@@ -10,4 +10,5 @@ import java.util.UUID;
 public class BookResponseLowDTO {
     private UUID id;
     private String title;
+    private String viewLink;
 }
