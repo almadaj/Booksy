@@ -3,6 +3,9 @@ package br.com.booksy.Booksy.controller;
 import br.com.booksy.Booksy.domain.dto.UserRequestDTO;
 import br.com.booksy.Booksy.domain.dto.UserResponseDTO;
 import br.com.booksy.Booksy.service.UserService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuário(s) encontrado(s) ou criado"),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content()),
+        @ApiResponse(responseCode = "401", description = "Usuário não autorizado", content = @Content()),
+        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content()),
+        @ApiResponse(responseCode = "409", description = "Usuário com conflito", content = @Content()),
+        @ApiResponse(responseCode = "500", description = "Erro interno", content = @Content())
+})
 @Tag(name = "User")
 @RestController
 @RequestMapping("/api/v1/users")
@@ -40,6 +51,7 @@ public class UserController {
         return ResponseEntity.ok(userService.update(id, user));
     }
 
+    @ApiResponse(responseCode = "200", description = "Deletado com sucesso")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         userService.deleteById(id);

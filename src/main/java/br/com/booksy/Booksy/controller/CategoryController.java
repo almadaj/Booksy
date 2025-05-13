@@ -4,6 +4,9 @@ import br.com.booksy.Booksy.domain.dto.CategoryDTO;
 import br.com.booksy.Booksy.domain.dto.CategoryResponseDTO;
 import br.com.booksy.Booksy.domain.model.Category;
 import br.com.booksy.Booksy.service.CategoryService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Categoria(s) encontrada(s) ou criado"),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content()),
+        @ApiResponse(responseCode = "401", description = "Usuário não autorizado", content = @Content()),
+        @ApiResponse(responseCode = "404", description = "Categoria não encontrada", content = @Content()),
+        @ApiResponse(responseCode = "409", description = "Categoria com conflito", content = @Content()),
+        @ApiResponse(responseCode = "500", description = "Erro interno", content = @Content())
+})
 @Tag(name = "Category")
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -41,6 +52,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.update(id, category));
     }
 
+    @ApiResponse(responseCode = "200", description = "Deletado com sucesso")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         categoryService.delete(id);
