@@ -41,11 +41,13 @@ public class UserService {
         return this.userRepository.findAll().stream().map(userMapper::userToUserResponseDTO).collect(Collectors.toList());
     }
 
-    public UserResponseDTO save(UserRequestDTO userDTO) {
+    public UserResponseDTO save(UserRequestDTO userRequestDTO) {
         try {
-            userDTO.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
-            var newUser = userRepository.save(userMapper.userRequestDTOtoUser(userDTO));
-            return userMapper.userToUserResponseDTO(newUser);
+            userRequestDTO.setPassword(new BCryptPasswordEncoder().encode(userRequestDTO.getPassword()));
+            User newUser = userMapper.userRequestDTOtoUser(userRequestDTO);
+            newUser.setIsAdmin(false);
+            User savedUser = userRepository.save(newUser);
+            return userMapper.userToUserResponseDTO(savedUser);
         } catch (Exception e) {
             throw new CommonException(HttpStatus.BAD_REQUEST, "booksy.user.save.badRequest", "Error while saving user");
         }

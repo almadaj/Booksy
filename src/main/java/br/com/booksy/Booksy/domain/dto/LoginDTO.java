@@ -6,15 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
 @Builder
-public class UserRequestDTO {
-    @NotBlank(message = "name cannot be empty")
-    @NotNull(message = "name canot be empty")
-    private String name;
-
+public class LoginDTO {
     @Email(message = "invalid e-mail")
     private String email;
 
