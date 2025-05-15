@@ -36,6 +36,7 @@ import java.util.UUID;
 public class BookController {
     private final BookService bookService;
 
+    @Operation(summary = "Buscar um Livros por ID", description = "Retorna Book de ID correspondente")
     @GetMapping("/{id}")
     public ResponseEntity<BookResponseDTO> findBookById(@PathVariable UUID id) {
         return ResponseEntity.ok(bookService.findById(id));
@@ -47,11 +48,13 @@ public class BookController {
         return ResponseEntity.ok(bookService.findAll());
     }
 
+    @Operation(summary = "Criar um Livro", description = "Cria e retorna um novo Book")
     @PostMapping
     public ResponseEntity<BookResponseDTO> save(@RequestBody @Valid BookDTO bookDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.save(bookDTO));
     }
 
+    @Operation(summary = "Atualizar um Livro", description = "Atualiza as informações de um Book existente")
     @PutMapping("/{id}")
     public ResponseEntity<BookResponseDTO> update(@PathVariable UUID id, @RequestBody @Valid BookDTO bookDTO) {
         return ResponseEntity.ok(bookService.update(id, bookDTO));
@@ -74,6 +77,7 @@ public class BookController {
         return bookService.uploadPdf(id, file);
     }
 
+    @Operation(summary = "Excluir um Livro", description = "Remove o Livro com o ID fornecido")
     @ApiResponse(responseCode = "200", description = "Deletado com sucesso")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
