@@ -1,5 +1,6 @@
 package br.com.booksy.Booksy.service;
 
+import br.com.booksy.Booksy.domain.dto.ReadingResponseDTO;
 import br.com.booksy.Booksy.domain.dto.UserRequestDTO;
 import br.com.booksy.Booksy.domain.dto.UserResponseDTO;
 import br.com.booksy.Booksy.domain.mapper.UserMapper;
@@ -39,6 +40,11 @@ public class UserService {
 
     public List<UserResponseDTO> findAll() {
         return this.userRepository.findAll().stream().map(userMapper::userToUserResponseDTO).collect(Collectors.toList());
+    }
+
+    public User findByEmail(String email){
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new CommonException(HttpStatus.NOT_FOUND, "booksy.user.findByEmail.notFound", "User not found"));
     }
 
     public UserResponseDTO save(UserRequestDTO userRequestDTO) {
