@@ -49,6 +49,7 @@ public class ReadingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(readingService.save(readingRequestDTO));
     }
 
+    @Operation(summary = "Lista as Leituras", description = "Retorna uma lista de Readings de um User")
     @GetMapping()
     public ResponseEntity<List<ReadingResponseDTO>> findByUserId(@AuthenticationPrincipal Jwt principal){
         String userEmail = principal.getSubject();
@@ -64,6 +65,7 @@ public class ReadingController {
         return ResponseEntity.ok(readingService.update(id, readingRequestDTO));
     }
 
+    @Operation(summary = "Deleta uma Leitura", description = "Deleta um Reading")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id){
         readingService.deleteById(id);
