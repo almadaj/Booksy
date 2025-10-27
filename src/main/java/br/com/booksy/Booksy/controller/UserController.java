@@ -2,6 +2,7 @@ package br.com.booksy.Booksy.controller;
 
 import br.com.booksy.Booksy.domain.dto.UserRequestDTO;
 import br.com.booksy.Booksy.domain.dto.UserResponseDTO;
+import br.com.booksy.Booksy.domain.model.User;
 import br.com.booksy.Booksy.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,6 +38,14 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> findUserById(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.findById(id));
     }
+
+    @Operation(summary = "Buscar Usuário por email", description = "Retorna os dados do User correspondente ao email")
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> findUserByEmail(@PathVariable String email) {
+        User user = userService.findByEmail(email);
+        return ResponseEntity.ok(user);
+    }
+
 
     @Operation(summary = "Listar Usuário", description = "Retorna todos os User cadastrados")
     @GetMapping
