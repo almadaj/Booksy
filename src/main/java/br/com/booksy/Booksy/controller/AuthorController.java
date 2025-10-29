@@ -32,6 +32,7 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @Operation(summary = "Buscar todos os Autores", description = "Retorna uma lista de Authors")
+    @GetMapping
     public ResponseEntity<List<AuthorResponseDTO>> findAll() {
         return ResponseEntity.ok(authorService.findAll());
     }
