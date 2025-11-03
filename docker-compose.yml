@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres
+    image: postgres:17
     container_name: booksy_postgresql
     environment:
       POSTGRES_DB: booksy

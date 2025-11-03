@@ -1,5 +1,6 @@
 package br.com.booksy.Booksy.domain.model;
 
+import br.com.booksy.Booksy.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,14 +28,15 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private Boolean isAdmin;
-
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @PrePersist
     protected void onCreate() {

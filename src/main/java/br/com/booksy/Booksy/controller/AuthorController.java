@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,12 +34,14 @@ public class AuthorController {
 
     @Operation(summary = "Buscar todos os Autores", description = "Retorna uma lista de Authors")
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<AuthorResponseDTO>> findAll() {
         return ResponseEntity.ok(authorService.findAll());
     }
 
     @Operation(summary = "Buscar um Autor específico", description = "Retorna o Author buscado")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<AuthorResponseDTO> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(authorService.findById(id));
     }
@@ -46,12 +49,14 @@ public class AuthorController {
 
     @Operation(summary = "Cria um Autor", description = "Retorna o Author criado")
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AuthorResponseDTO> save(@RequestBody @Valid AuthorDTO author) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authorService.save(author));
     }
 
     @Operation(summary = "Edita um Autor específico", description = "Retorna o update feito em Author")
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AuthorResponseDTO> update(@PathVariable UUID id, @RequestBody @Valid AuthorDTO author) {
         return ResponseEntity.ok(authorService.update(id, author));
     }
@@ -59,6 +64,7 @@ public class AuthorController {
     @ApiResponse(responseCode = "200", description = "Deletado com sucesso")
     @Operation(summary = "Edita um Autor específico", description = "Retorna o update feito em Author")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         authorService.delete(id);
         return ResponseEntity.noContent().build();

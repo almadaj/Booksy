@@ -3,6 +3,7 @@ package br.com.booksy.Booksy.service;
 import br.com.booksy.Booksy.domain.dto.ReadingResponseDTO;
 import br.com.booksy.Booksy.domain.dto.UserRequestDTO;
 import br.com.booksy.Booksy.domain.dto.UserResponseDTO;
+import br.com.booksy.Booksy.domain.enums.Role;
 import br.com.booksy.Booksy.domain.mapper.UserMapper;
 import br.com.booksy.Booksy.domain.model.User;
 import br.com.booksy.Booksy.exception.CommonException;
@@ -51,7 +52,7 @@ public class UserService {
         try {
             userRequestDTO.setPassword(new BCryptPasswordEncoder().encode(userRequestDTO.getPassword()));
             User newUser = userMapper.userRequestDTOtoUser(userRequestDTO);
-            newUser.setIsAdmin(false);
+            newUser.setRole(Role.ROLE_USER);
             User savedUser = userRepository.save(newUser);
             return userMapper.userToUserResponseDTO(savedUser);
         } catch (Exception e) {

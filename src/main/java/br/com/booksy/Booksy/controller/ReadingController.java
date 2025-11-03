@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -39,18 +40,21 @@ public class ReadingController {
 
     @Operation(summary = "Buscar Leitura por ID", description = "Retorna os dados de uma Reading específica")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ReadingResponseDTO> findReadingById(@PathVariable UUID id){
         return ResponseEntity.ok(readingService.findById(id));
     }
 
     @Operation(summary = "Iniciar uma Leitura", description = "Cria um registro de Reading para um Livro")
     @PostMapping()
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ReadingResponseDTO> save(@RequestBody @Valid ReadingRequestDTO readingRequestDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(readingService.save(readingRequestDTO));
     }
 
     @Operation(summary = "Lista as Leituras", description = "Retorna uma lista de Readings de um User")
     @GetMapping()
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<ReadingResponseDTO>> findByUserId(@AuthenticationPrincipal Jwt principal){
         String userEmail = principal.getSubject();
         User user = userService.findByEmail(userEmail);
@@ -61,12 +65,14 @@ public class ReadingController {
 
     @Operation(summary = "Atualizar Leitura", description = "Atualiza o status ou progresso da Reading")
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ReadingResponseDTO> update(@PathVariable UUID id, @RequestBody @Valid ReadingRequestDTO readingRequestDTO){
         return ResponseEntity.ok(readingService.update(id, readingRequestDTO));
     }
 
     @Operation(summary = "Deleta uma Leitura", description = "Deleta um Reading")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id){
         readingService.deleteById(id);
         return ResponseEntity.noContent().build();

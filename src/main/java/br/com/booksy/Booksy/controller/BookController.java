@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,24 +39,28 @@ public class BookController {
 
     @Operation(summary = "Buscar um Livros por ID", description = "Retorna Book de ID correspondente")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<BookResponseDTO> findBookById(@PathVariable UUID id) {
         return ResponseEntity.ok(bookService.findById(id));
     }
 
     @Operation(summary = "Buscar todos os Livros", description = "Retorna uma lista de Books")
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<BookResponseDTO>> findAll() {
         return ResponseEntity.ok(bookService.findAll());
     }
 
     @Operation(summary = "Criar um Livro", description = "Cria e retorna um novo Book")
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BookResponseDTO> save(@RequestBody @Valid BookDTO bookDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.save(bookDTO));
     }
 
     @Operation(summary = "Atualizar um Livro", description = "Atualiza as informações de um Book existente")
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BookResponseDTO> update(@PathVariable UUID id, @RequestBody @Valid BookDTO bookDTO) {
         return ResponseEntity.ok(bookService.update(id, bookDTO));
     }
@@ -63,6 +68,7 @@ public class BookController {
     @ApiResponse(responseCode = "415", description = "Formato não suportado", content = @Content())
     @Operation(summary = "Upload de Livro", description = "Upload do livro referente")
     @PatchMapping(value = "/{id}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public String uploadPdf(
             @PathVariable UUID id,
             @Parameter(
@@ -80,6 +86,7 @@ public class BookController {
     @Operation(summary = "Excluir um Livro", description = "Remove o Livro com o ID fornecido")
     @ApiResponse(responseCode = "200", description = "Deletado com sucesso")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         bookService.deleteById(id);
         return ResponseEntity.noContent().build();

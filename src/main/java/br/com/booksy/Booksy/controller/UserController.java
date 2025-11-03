@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,32 +36,36 @@ public class UserController {
 
     @Operation(summary = "Buscar Usuário por ID", description = "Retorna os dados do User correspondente")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<UserResponseDTO> findUserById(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.findById(id));
     }
 
     @Operation(summary = "Buscar Usuário por email", description = "Retorna os dados do User correspondente ao email")
     @GetMapping("/email/{email}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<User> findUserByEmail(@PathVariable String email) {
         User user = userService.findByEmail(email);
         return ResponseEntity.ok(user);
     }
 
-
     @Operation(summary = "Listar Usuário", description = "Retorna todos os User cadastrados")
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
 
     @Operation(summary = "Cadastrar um Usuário", description = "Cria e retorna um novo User")
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> save(@RequestBody @Valid UserRequestDTO user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
     }
 
     @Operation(summary = "Atualizar Usuário", description = "Atualiza as informações de um User")
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> update(@PathVariable UUID id, @RequestBody @Valid UserRequestDTO user) {
         return ResponseEntity.ok(userService.update(id, user));
     }
@@ -68,6 +73,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Deletado com sucesso")
     @Operation(summary = "Excluir Usuário", description = "Remove um User do sistema")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         userService.deleteById(id);
         return ResponseEntity.noContent().build();
