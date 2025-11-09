@@ -11,4 +11,5 @@ public class BookResponseLowDTO {
     private UUID id;
     private String title;
     private String viewLink;
+    private String cover;
 }

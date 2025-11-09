@@ -38,5 +38,7 @@ public class BookDTO {
     @NotNull(message = "authorId cannot be empty")
     private UUID authorId;
 
+    private String cover;
+
     private Set<UUID> categoryIds;
 }

@@ -17,4 +17,5 @@ public class BookResponseDTO {
     private Integer releaseDate;
     private AuthorResponseDTO author;
     private List<CategoryResponseDTO> categories;
+    private String cover;
 }

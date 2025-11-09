@@ -44,6 +44,9 @@ public class Book {
     @Column(length = 100)
     private String viewLink;
 
+    @Column(name = "cover")
+    private String cover;
+
     @ManyToMany
     @JoinTable(
             name = "book_categories",
