@@ -16,7 +16,7 @@ import java.util.UUID;
 @Entity
 @Builder
 @Table(name = "reviews")
-public class Review {
+public class    Review {
     @Id
     @GeneratedValue
     @Column(columnDefinition = "uuid")

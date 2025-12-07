@@ -56,10 +56,8 @@ public class ReadingController {
     @GetMapping()
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<ReadingResponseDTO>> findByUserId(@AuthenticationPrincipal Jwt principal){
-        String userEmail = principal.getSubject();
-        User user = userService.findByEmail(userEmail);
-        UUID userId = user.getId();
-        List<ReadingResponseDTO> readings = readingService.findByUserId(userId);
+        String userId = principal.getSubject();
+        List<ReadingResponseDTO> readings = readingService.findByUserId(UUID.fromString(userId));
         return ResponseEntity.ok(readings);
     }
 

@@ -16,5 +16,5 @@ public class ReadingResponseDTO {
     private int currentPage;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private BookResponseLowDTO book;
+    private BookResponseDTO book;
 }
